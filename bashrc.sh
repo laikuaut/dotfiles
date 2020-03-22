@@ -2,6 +2,7 @@
 
 alias rm="rm -i"
 alias pwd="pwd -P"
+alias la="ls -a"
 alias ll="ls -la"
 alias vi="vim"
 
