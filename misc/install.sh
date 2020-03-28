@@ -8,14 +8,22 @@
 
 # スクリプト自身のパス
 typeset -r SCRIPT_DIR=$(cd $(dirname $0); pwd)
-typeset -r PROJECT_DIR=$(cd ../; pwd)
+# プロジェクトの絶対パス
+typeset -r PROJECT_DIR=$(cd ${SCRIPT_DIR%/*}; pwd)
+
+# dotfilesパス
+typeset -r DOTFILES_DIR="${PROJECT_DIR}/dotfiles"
+# profile.dパス
+typeset -r PROFILE_D_DIR="${PROJECT_DIR}/profile.d"
+# utilsパス
+typeset -r UTILS_DIR="${PROJECT_DIR}/utils"
 
 #################################################
 # source読み込み
 #################################################
 
 # bashユーティリティ
-source ${PROJECT_DIR}/utils/utils.sh
+source ${UTILS_DIR}/utils.sh
 
 #################################################
 # 関数定義
@@ -64,7 +72,7 @@ function __replace_dotfile() {
 # TODO
 function __install_profiles() {
     local install_dir="/etc/profile.d"
-    for profile in ${PROJECT_DIR}/profile.d/*.sh
+    for profile in ${PROFILE_D_DIR}/*.sh
     do
         log_info "${profile} のインストールを開始します。"
         read -p "== ${install_dir}/`basename ${profile}` へインストールしますか？ (y/N): " yn
@@ -85,11 +93,11 @@ function __install_profiles() {
 #################################################
 
 # dotfileをインストール
-__install_dotfile "${PROJECT_DIR}/vimrc" "${HOME}/.vimrc"
-__install_dotfile "${PROJECT_DIR}/bashrc.sh" "${HOME}/.bashrc"
-__install_dotfile "${PROJECT_DIR}/utils/utils.sh" "${HOME}/.bashrc"
-__install_dotfile "${PROJECT_DIR}/bash_profile.sh" "${HOME}/.bash_profile"
-__install_dotfile "${PROJECT_DIR}/bash_logout.sh" "${HOME}/.bash_logout"
+__install_dotfile "${DOTFILES_DIR}/vimrc" "${HOME}/.vimrc"
+__install_dotfile "${DOTFILES_DIR}/bashrc.sh" "${HOME}/.bashrc"
+__install_dotfile "${UTILS_DIR}/utils.sh" "${HOME}/.bashrc"
+__install_dotfile "${DOTFILES_DIR}/bash_profile.sh" "${HOME}/.bash_profile"
+__install_dotfile "${DOTFILES_DIR}/bash_logout.sh" "${HOME}/.bash_logout"
 
 # profile.dをインストール
 __install_profiles
