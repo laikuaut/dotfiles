@@ -87,6 +87,7 @@ function __install_profiles() {
 # dotfileをインストール
 __install_dotfile "${PROJECT_DIR}/vimrc" "${HOME}/.vimrc"
 __install_dotfile "${PROJECT_DIR}/bashrc.sh" "${HOME}/.bashrc"
+__install_dotfile "${PROJECT_DIR}/utils/utils.sh" "${HOME}/.bashrc"
 __install_dotfile "${PROJECT_DIR}/bash_profile.sh" "${HOME}/.bash_profile"
 __install_dotfile "${PROJECT_DIR}/bash_logout.sh" "${HOME}/.bash_logout"
 
