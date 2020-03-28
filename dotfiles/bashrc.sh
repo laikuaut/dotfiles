@@ -28,10 +28,10 @@ alias vi="vim"
 
 # ssh-agentの環境変数を読み込み
 if pgrep "^ssh-agent$" >& /dev/null;then
-    source ${SSH_AGENT_FILE}
+    source ${SSH_AGENT_FILE} >& /dev/null
 else
     ssh-agent > ${SSH_AGENT_FILE}
-    source ${SSH_AGENT_FILE}
+    source ${SSH_AGENT_FILE} >& /dev/null
     for ssh_key in ${HOME}/.ssh/id_rsa_*
     do
       ssh-add ${ssh_key}
