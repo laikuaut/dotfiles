@@ -5,10 +5,21 @@
 # 関数定義
 #################################################
 
+# 絶対パスのファイル一覧取得
+# TODO
+function lsa() {
+    for file in `ls`
+    do
+      echo "`pwd`/${file}"
+    done
+}
+
 # TODO
 function cat_filename() {
     local file_path=$1; shift;
-    log_info "${file_path}"
+    echo "#######################################" >&2
+    echo "# ${file_path}" >&2
+    echo "#######################################" >&2
     cat ${file_path}
     echo
 }
