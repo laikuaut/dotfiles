@@ -6,30 +6,61 @@
 #################################################
 
 # 絶対パスのファイル一覧取得
-# TODO
+#
+# Args:
+#   なし
+#
+# Returns:
+#   0: 正常終了
+#   1: 異常終了
+#
 function lsa() {
     for file in `ls`
     do
       echo "`pwd`/${file}"
     done
+
+    return 0
 }
 
-# TODO
+# ファイル名＋ファイル内容出力
+#
+# Args:
+#   なし
+#
+# Returns:
+#   0: 正常終了
+#   1: 異常終了
+#
 function cat_filename() {
     local file_path=$1; shift;
     echo "#######################################" >&2
     echo "# ${file_path}" >&2
     echo "#######################################" >&2
     cat ${file_path}
-    echo
+    if [ $? -ne 0 ];then log_debug "fail."; return 1; fi
+    echo >&2
 }
 
-# TODO
-function log_info() {
+# DEBUGログ出力
+#
+# Args:
+#   $1 message: ログメッセージ文字列
+#
+# Returns:
+#   0: 正常終了
+#   1: 異常終了
+#
+# Notes:
+#   loggerコマンドを利用して出力を行う。
+#     - tag名:  実行シェル名($0)[:呼び出し元関数名]
+#     - 優先度: debug
+#     - 出力先: 標準エラー出力
+#
+function log_debug() {
     local message="$1"; shift;
     local tag_name="`basename $0`"
-    local priority="info"
-    #echo "[LOG][`date '+%Y-%m-%d +%H:%M:%S'`] ${message}" >&2
+    local priority="debug"
 
     if [ -n "${FUNCNAME[1]}" ];then
         tag_name="${tag_name}:${FUNCNAME[1]}"
