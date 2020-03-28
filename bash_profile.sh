@@ -4,3 +4,4 @@
 export LANG="ja_JP.utf8"
 # タイムゾーンを設定（JST）
 export TZ="Asia/Tokyo"
+

@@ -4,6 +4,8 @@
 # 定数定義
 #################################################
 
+SSH_AGENT_FILE=$HOME/.ssh-agent
+
 #################################################
 # alias定義
 #################################################
@@ -15,25 +17,33 @@ alias ll="ls -la"
 alias vi="vim"
 
 #################################################
-# 関数定義
+# コマンド定義
 #################################################
 
 # 絶対パスのファイル一覧取得
 function lsa() {
-  for file in `ls`
-  do
-    echo "`pwd`/${file}"
-  done
+    for file in `ls`
+    do
+      echo "`pwd`/${file}"
+    done
 }
+
+#################################################
+# 関数定義
+#################################################
 
 #################################################
 # bash起動時の初期設定
 #################################################
 
-# SSH秘密鍵を保持
-eval `ssh-agent`
-for ssh_key in ~/.ssh/id_rsa_*
-do
-  ssh-add ${ssh_key}
-done
-
+# ssh-agentの環境変数を読み込み
+if pgrep "^ssh-agent$" >& /dev/null;then
+    source ${SSH_AGENT_FILE}
+else
+    ssh-agent > ${SSH_AGENT_FILE}
+    source ${SSH_AGENT_FILE}
+    for ssh_key in ${HOME}/.ssh/id_rsa_*
+    do
+      ssh-add ${ssh_key}
+    done
+fi
