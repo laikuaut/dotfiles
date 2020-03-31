@@ -1,6 +1,9 @@
 # utils.sh
 # bashユーティリティ
 
+# TODO: モジュール単位にファイルを分ける。
+#       インストールしないと使えないコマンドのチェックなどはファイル読み込みの最初に行う。
+
 #################################################
 # 関数定義
 #################################################
@@ -66,4 +69,42 @@ function log_debug() {
         tag_name="${tag_name}:${FUNCNAME[1]}"
     fi
     logger -t "${tag_name}" -p "${priority}" -s -- "${message}"
+}
+
+# TODO
+function docker-clean() {
+
+    # dokcerコマンドが存在するか確認
+    if ! type docker >& /dev/null;then
+        log_debug "fail. (dockerコマンドがありません。)"
+        return 1;
+    fi
+
+    # dockerコンテナ削除
+    docker ps -a
+    read -p "== 全てのdockerコンテナを削除しますか？ (y/N): " yn
+    case "$yn" in
+        [yY]*)
+            docker ps -qa | xargs docker rm
+            ;;
+        *)
+            log_debug "cancel."
+            ;;
+    esac
+
+    # dockerイメージ削除
+    docker images
+    read -p "== 全てのdockerイメージを削除しますか？ (y/N): " yn
+    case "$yn" in
+        [yY]*)
+            docker images -q | xargs docker rmi
+            ;;
+        *)
+            log_debug "cancel."
+            ;;
+    esac
+
+    # dockerボリューム削除
+    docker volume ls
+    docker volume prune
 }
