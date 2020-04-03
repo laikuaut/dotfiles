@@ -16,15 +16,18 @@ typeset -r PROJECT_DIR=$(cd ${SCRIPT_DIR%/*}; pwd)
 typeset -r DOTFILES_DIR="${PROJECT_DIR}/dotfiles"
 # profile.dパス
 typeset -r PROFILE_D_DIR="${PROJECT_DIR}/profile.d"
-# utilsパス
-typeset -r UTILS_DIR="${PROJECT_DIR}/utils"
+# libパス
+typeset -r LIB_DIR="${PROJECT_DIR}/lib"
 
 #################################################
 # source読み込み
 #################################################
 
 # bashユーティリティ
-source ${UTILS_DIR}/utils.sh
+for lib_file in ${LIB_DIR}/*.sh
+do
+    source ${lib_file}
+done
 
 #################################################
 # 関数定義
@@ -48,9 +51,10 @@ function __install_dotfile() {
     local target_path=$1; shift;
 
     log_debug "インストールを開始します。(${source_path})"
+    log_debug "${target_path} を表示"
     usleep 500000
     cat_filename ${target_path}
-    read -p "== ${target_path} へインストールしますか？ (y/N): " yn
+    read -p "== ${source_path} をインストールしますか？ (y/N): " yn
     case "$yn" in
         [yY]*)
             __replace_dotfile ${source_path} ${target_path}
@@ -137,9 +141,12 @@ function __install_profiles() {
 #################################################
 
 # dotfileをインストール
+for lib_file in ${LIB_DIR}/*.sh
+do
+    __install_dotfile "${lib_file}" "${HOME}/.bashrc"
+done
 __install_dotfile "${DOTFILES_DIR}/vimrc" "${HOME}/.vimrc"
 __install_dotfile "${DOTFILES_DIR}/bashrc.sh" "${HOME}/.bashrc"
-__install_dotfile "${UTILS_DIR}/utils.sh" "${HOME}/.bashrc"
 __install_dotfile "${DOTFILES_DIR}/bash_profile.sh" "${HOME}/.bash_profile"
 __install_dotfile "${DOTFILES_DIR}/bash_logout.sh" "${HOME}/.bash_logout"
 
