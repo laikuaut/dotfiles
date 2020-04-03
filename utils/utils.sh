@@ -71,7 +71,26 @@ function log_debug() {
     logger -t "${tag_name}" -p "${priority}" -s -- "${message}"
 }
 
-# TODO
+# Dockerクリーン
+#
+# Args:
+#   $1 message: ログメッセージ文字列
+#
+# Returns:
+#   0: 正常終了
+#   1: 異常終了
+#
+# Notes:
+#   - Dockerコンテナ全削除
+#     $ docker ps -qa | xargs docker rm
+#
+#   - Dockerイメージ全削除
+#     $ docker images -q | xargs docker rmi
+#
+#   - Dockerボリューム全削除
+#     $ docker volume ls
+#     $ docker volume prune
+#
 function docker-clean() {
 
     # dokcerコマンドが存在するか確認
